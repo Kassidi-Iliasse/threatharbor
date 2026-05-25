@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Generated reports (anchored at repo root so we don't ignore templates/report.html)
+/report.html
+/*_report.html
+/reports/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
