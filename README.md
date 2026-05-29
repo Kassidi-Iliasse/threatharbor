@@ -1,4 +1,4 @@
-# vuln-scanner
+# ThreatHarbor
 
 A small command-line web vulnerability scanner. Given a target URL, it runs
 a handful of OWASP-style checks (security headers, cookie flags, redirect
