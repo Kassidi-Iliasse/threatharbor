@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#14c474" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="ThreatHarbor">
+  <path d="M12 2.6 5 5.3v6c0 4.5 3 7.3 7 8.4 4-1.1 7-3.9 7-8.4v-6z"/>
+  <circle cx="12" cy="7" r="1.15"/>
+  <path d="M12 8.15v7.1"/>
+  <path d="M9.6 10.1h4.8"/>
+  <path d="M8.2 12a3.8 3.8 0 0 0 7.6 0"/>
+</svg>

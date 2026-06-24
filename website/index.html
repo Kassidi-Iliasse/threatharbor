@@ -12,7 +12,7 @@
 <meta property="og:description" content="Scan a URL for the web-security basics. Get a color-coded report in seconds.">
 <meta property="og:type" content="website">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2303110a'/%3E%3Cpath d='M18 11c0 4-2.8 6-6.1 7.16a.8.8 0 0 1-.54 0C8 17 5.2 15 5.2 11V5.6a.8.8 0 0 1 .8-.8c1.6 0 3.6-.96 5-2.18a.94.94 0 0 1 1.2 0C13.6 3.85 15.6 4.8 17.2 4.8a.8.8 0 0 1 .8.8z' fill='none' stroke='%2314c474' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M8.2 11l2 2 3.6-3.6' fill='none' stroke='%2314c474' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2303110a'/%3E%3Cg fill='none' stroke='%2314c474' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2.6 5 5.3v6c0 4.5 3 7.3 7 8.4 4-1.1 7-3.9 7-8.4v-6z'/%3E%3Ccircle cx='12' cy='7' r='1.15'/%3E%3Cpath d='M12 8.15v7.1'/%3E%3Cpath d='M9.6 10.1h4.8'/%3E%3Cpath d='M8.2 12a3.8 3.8 0 0 0 7.6 0'/%3E%3C/g%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,9 +29,12 @@
 <header class="nav" id="nav">
   <div class="container nav__inner">
     <a class="brand" href="#top" aria-label="ThreatHarbor home">
-      <svg class="brand__mark" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
-        <path d="m9 12 2 2 4-4"/>
+      <svg class="brand__mark" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 2.6 5 5.3v6c0 4.5 3 7.3 7 8.4 4-1.1 7-3.9 7-8.4v-6z"/>
+        <circle cx="12" cy="7" r="1.15"/>
+        <path d="M12 8.15v7.1"/>
+        <path d="M9.6 10.1h4.8"/>
+        <path d="M8.2 12a3.8 3.8 0 0 0 7.6 0"/>
       </svg>
       <span class="brand__name">ThreatHarbor</span>
     </a>
@@ -110,14 +113,17 @@
       <div class="console__body" id="consoleBody">
         <div class="line line--cmd"><span class="muted">$</span> python main.py --url https://example.com --verbose</div>
         <div class="line line--sys">fetching https://example.com <span class="ok">200 OK</span> (412ms)</div>
-        <div class="line line--sys">running 4 checks</div>
+        <div class="line line--sys">running 5 checks</div>
         <div class="line line--find" data-sev="medium"><span class="sev sev--medium">MEDIUM</span> Missing X-Frame-Options header</div>
         <div class="line line--find" data-sev="medium"><span class="sev sev--medium">MEDIUM</span> Missing Content-Security-Policy header</div>
         <div class="line line--find" data-sev="medium"><span class="sev sev--medium">MEDIUM</span> Missing Strict-Transport-Security header</div>
         <div class="line line--find" data-sev="low"><span class="sev sev--low">LOW</span> Missing X-Content-Type-Options header</div>
         <div class="line line--find" data-sev="low"><span class="sev sev--low">LOW</span> Missing Referrer-Policy header</div>
+        <div class="line line--find" data-sev="low"><span class="sev sev--low">LOW</span> Missing Permissions-Policy header</div>
+        <div class="line line--find" data-sev="low"><span class="sev sev--low">LOW</span> Missing Cross-Origin-Opener-Policy header</div>
         <div class="line line--find" data-sev="info"><span class="sev sev--info">INFO</span> Server header exposes software: cloudflare</div>
-        <div class="line line--done"><span class="ok">scan complete.</span> High 0, Medium 3, Low 2, Info 1.</div>
+        <div class="line line--find" data-sev="info"><span class="sev sev--info">INFO</span> TLS connection: TLSv1.3, cert valid to 2026-08-29</div>
+        <div class="line line--done"><span class="ok">scan complete.</span> High 0, Medium 3, Low 4, Info 2.</div>
         <div class="line line--sys">report.html written.</div>
       </div>
     </div>
@@ -127,7 +133,7 @@
   <section class="legend container" aria-label="Severity levels">
     <div class="legend__item" style="--c:var(--high)">
       <span class="sev sev--high">HIGH</span>
-      <p>Exploitable today. Currently only the reflected-XSS probe reports this.</p>
+      <p>Directly dangerous today — an invalid TLS certificate, or the reflected-XSS probe firing.</p>
     </div>
     <div class="legend__item" style="--c:var(--medium)">
       <span class="sev sev--medium">MEDIUM</span>
@@ -148,7 +154,7 @@
     <div class="section__head">
       <span class="section__eyebrow">// 01 &mdash; checks</span>
       <h2>What it checks</h2>
-      <p class="section__sub">Five modules, run in order against a single fetch of the page. Each returns findings tagged with a severity.</p>
+      <p class="section__sub">Six modules, run in order. Most share a single fetch of the page; the TLS check opens its own handshake. Each returns findings tagged with a severity.</p>
     </div>
 
     <ol class="checks">
@@ -156,12 +162,20 @@
         <span class="check__idx">01</span>
         <div class="check__main">
           <h3>Security headers</h3>
-          <p>Looks for missing response headers (X-Frame-Options, CSP, HSTS, Referrer-Policy, X-Content-Type-Options) and flags servers that leak their software version.</p>
+          <p>Looks for missing response headers (X-Frame-Options, CSP, HSTS, Referrer-Policy, X-Content-Type-Options, Permissions-Policy, Cross-Origin-Opener-Policy), flags present-but-weak ones (CSP allowing <code>unsafe-inline</code>, short HSTS <code>max-age</code>), and catches servers that leak their software version.</p>
         </div>
         <div class="check__sevs"><span class="chip chip--medium">Medium</span><span class="chip chip--low">Low</span><span class="chip chip--info">Info</span></div>
       </li>
       <li class="check">
         <span class="check__idx">02</span>
+        <div class="check__main">
+          <h3>TLS &amp; certificate</h3>
+          <p>Opens its own TLS handshake to validate the certificate (expiry, untrusted issuer, hostname mismatch) and flags connections negotiated over a legacy protocol like TLS 1.0/1.1.</p>
+        </div>
+        <div class="check__sevs"><span class="chip chip--high">High</span><span class="chip chip--medium">Medium</span><span class="chip chip--info">Info</span></div>
+      </li>
+      <li class="check">
+        <span class="check__idx">03</span>
         <div class="check__main">
           <h3>Cookie flags</h3>
           <p>Inspects every Set-Cookie for the three flags that matter: HttpOnly (hide from JavaScript), Secure (HTTPS only), and SameSite (cross-site defense).</p>
@@ -169,7 +183,7 @@
         <div class="check__sevs"><span class="chip chip--medium">Medium</span><span class="chip chip--low">Low</span></div>
       </li>
       <li class="check">
-        <span class="check__idx">03</span>
+        <span class="check__idx">04</span>
         <div class="check__main">
           <h3>Redirects</h3>
           <p>Checks whether plain HTTP upgrades to HTTPS, and whether the redirect chain ever jumps to a different host (a possible open redirect).</p>
@@ -177,7 +191,7 @@
         <div class="check__sevs"><span class="chip chip--medium">Medium</span><span class="chip chip--low">Low</span></div>
       </li>
       <li class="check">
-        <span class="check__idx">04</span>
+        <span class="check__idx">05</span>
         <div class="check__main">
           <h3>Forms</h3>
           <p>Parses every form on the page. Flags forms that submit over HTTP, and POST forms with no field that looks like a CSRF token.</p>
@@ -185,7 +199,7 @@
         <div class="check__sevs"><span class="chip chip--medium">Medium</span><span class="chip chip--info">Info</span></div>
       </li>
       <li class="check">
-        <span class="check__idx">05</span>
+        <span class="check__idx">06</span>
         <div class="check__main">
           <h3>Reflected XSS <span class="check__tag">active</span></h3>
           <p>Submits a probe payload through text inputs and checks whether it comes back unescaped in the HTML. Off by default; only runs with the <code>--unsafe</code> flag.</p>
@@ -263,13 +277,13 @@
         <div class="report__header">
           <h3>Vulnerability Scan Report</h3>
           <p class="report__target">https://example.com</p>
-          <p class="report__meta">Generated 2026-05-29 at 14:02:11. 6 findings.</p>
+          <p class="report__meta">Generated 2026-05-29 at 14:02:11. 9 findings.</p>
         </div>
         <div class="report__summary">
           <div class="rcell"><span class="rcell__n">0</span><span class="sev sev--high">HIGH</span></div>
           <div class="rcell"><span class="rcell__n">3</span><span class="sev sev--medium">MEDIUM</span></div>
-          <div class="rcell"><span class="rcell__n">2</span><span class="sev sev--low">LOW</span></div>
-          <div class="rcell"><span class="rcell__n">1</span><span class="sev sev--info">INFO</span></div>
+          <div class="rcell"><span class="rcell__n">4</span><span class="sev sev--low">LOW</span></div>
+          <div class="rcell"><span class="rcell__n">2</span><span class="sev sev--info">INFO</span></div>
         </div>
         <div class="report__finding" data-sev="medium">
           <div class="report__finding-head"><span class="report__finding-title">Missing Content-Security-Policy header</span><span class="sev sev--medium">MEDIUM</span></div>
@@ -285,6 +299,11 @@
           <div class="report__finding-head"><span class="report__finding-title">Server header exposes software</span><span class="sev sev--info">INFO</span></div>
           <p>The Server response header reveals the underlying web server, which helps attackers target known CVEs.</p>
           <code class="report__ev">Server: cloudflare</code>
+        </div>
+        <div class="report__finding" data-sev="info">
+          <div class="report__finding-head"><span class="report__finding-title">TLS connection details</span><span class="sev sev--info">INFO</span></div>
+          <p>Negotiated transport security for the target host, including protocol version and certificate expiry.</p>
+          <code class="report__ev">example.com:443 — TLSv1.3, cert valid until Aug 29 21:41:26 2026 GMT</code>
         </div>
       </div>
     </div>
@@ -373,9 +392,12 @@
   <div class="container footer__inner">
     <div class="footer__brand">
       <a class="brand" href="#top" aria-label="ThreatHarbor home">
-        <svg class="brand__mark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
-          <path d="m9 12 2 2 4-4"/>
+        <svg class="brand__mark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2.6 5 5.3v6c0 4.5 3 7.3 7 8.4 4-1.1 7-3.9 7-8.4v-6z"/>
+          <circle cx="12" cy="7" r="1.15"/>
+          <path d="M12 8.15v7.1"/>
+          <path d="M9.6 10.1h4.8"/>
+          <path d="M8.2 12a3.8 3.8 0 0 0 7.6 0"/>
         </svg>
         <span class="brand__name">ThreatHarbor</span>
       </a>
@@ -389,7 +411,7 @@
   </div>
   <div class="container footer__base">
     <span>Built by KASSIDI Iliasse</span>
-    <span class="mono">five checks, one report</span>
+    <span class="mono">six checks, one report</span>
   </div>
 </footer>
 
