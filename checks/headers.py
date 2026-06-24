@@ -30,7 +30,30 @@ EXPECTED_HEADERS: list[tuple[str, str, str]] = [
     ("Referrer-Policy", "Low",
      "Missing Referrer-Policy leaks the full referring URL to third "
      "parties on outbound links."),
+    ("Permissions-Policy", "Low",
+     "Missing Permissions-Policy means powerful browser features (camera, "
+     "microphone, geolocation, etc.) are not explicitly restricted."),
+    ("Cross-Origin-Opener-Policy", "Low",
+     "Missing Cross-Origin-Opener-Policy leaves the page sharing a browsing "
+     "context group with cross-origin openers, weakening isolation against "
+     "side-channel and tab-nabbing attacks."),
 ]
+
+# Minimum HSTS lifetime we consider acceptable (~180 days), matching common
+# preload-list guidance.
+HSTS_MIN_MAX_AGE = 15_552_000
+
+
+def _hsts_max_age(value: str) -> "int | None":
+    """Extract the ``max-age`` directive from an HSTS header value."""
+    for part in value.split(";"):
+        part = part.strip().lower()
+        if part.startswith("max-age="):
+            try:
+                return int(part.split("=", 1)[1])
+            except ValueError:
+                return None
+    return None
 
 
 def run(url: str, response: "requests.Response", session: "requests.Session") -> list[Finding]:
@@ -45,6 +68,37 @@ def run(url: str, response: "requests.Response", session: "requests.Session") ->
                 description=description,
                 severity=severity,
                 evidence=f"Header '{name}' not present in response from {url}",
+            ))
+
+    # Present-but-weak: a header can exist yet still be misconfigured.
+    csp = headers.get("Content-Security-Policy")
+    if csp:
+        unsafe = [kw for kw in ("'unsafe-inline'", "'unsafe-eval'") if kw in csp.lower()]
+        if unsafe:
+            findings.append(Finding(
+                title="Content-Security-Policy allows unsafe directives",
+                description=(
+                    "The CSP is present but permits "
+                    f"{' and '.join(kw.strip(chr(39)) for kw in unsafe)}, which "
+                    "largely defeats CSP's protection against injected scripts."
+                ),
+                severity="Low",
+                evidence=f"Content-Security-Policy: {csp[:160]}",
+            ))
+
+    hsts = headers.get("Strict-Transport-Security")
+    if hsts:
+        max_age = _hsts_max_age(hsts)
+        if max_age is not None and max_age < HSTS_MIN_MAX_AGE:
+            findings.append(Finding(
+                title="HSTS max-age is short",
+                description=(
+                    "Strict-Transport-Security is set but its max-age is below "
+                    "~180 days. A short window leaves users exposed to "
+                    "downgrade attacks once the policy lapses."
+                ),
+                severity="Low",
+                evidence=f"Strict-Transport-Security: {hsts}",
             ))
 
     server = headers.get("Server")

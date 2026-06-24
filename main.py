@@ -12,9 +12,11 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from pathlib import Path
 from urllib.parse import urlparse
 
 import reporter
+import reporter_json
 from scanner import run_scan
 
 
@@ -47,6 +49,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--url", required=True, type=_valid_url, help="target URL (http or https)")
     p.add_argument("--output", default="report.html", help="path to write the HTML report (default: report.html)")
+    p.add_argument(
+        "--format",
+        choices=("html", "json", "both"),
+        default="html",
+        help="report format(s) to write (default: html). JSON is written next "
+             "to --output with a .json suffix.",
+    )
     p.add_argument("--verbose", action="store_true", help="log findings to stdout as they are produced")
     p.add_argument(
         "--unsafe",
@@ -77,10 +86,17 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Scan aborted: {result.errors[0]}", file=sys.stderr)
         return 2
 
-    path = reporter.render(result, args.output)
+    outputs: list[str] = []
+    if args.format in ("html", "both"):
+        outputs.append(reporter.render(result, args.output))
+    if args.format in ("json", "both"):
+        json_path = str(Path(args.output).with_suffix(".json"))
+        outputs.append(reporter_json.render(result, json_path))
+
     summary = result.summary()
     print(f"Scanned: {result.target}")
-    print(f"Report:  {path}")
+    for path in outputs:
+        print(f"Report:  {path}")
     print(
         f"Findings: High={summary['High']}  Medium={summary['Medium']}  "
         f"Low={summary['Low']}  Info={summary['Info']}"

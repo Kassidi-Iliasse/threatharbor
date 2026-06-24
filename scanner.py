@@ -71,7 +71,7 @@ def run_scan(
     """
     # Lazy import: each check module imports Finding from this file, so
     # importing them at module top causes a circular import.
-    from checks import cookies, forms, headers, redirects, xss
+    from checks import cookies, forms, headers, redirects, tls, xss
 
     result = ScanResult(target=url)
     session = requests.Session()
@@ -85,6 +85,7 @@ def run_scan(
 
     check_modules: list[tuple[str, CheckFn]] = [
         ("headers", headers.run),
+        ("tls", tls.run),
         ("cookies", cookies.run),
         ("redirects", redirects.run),
         ("forms", forms.run),
@@ -98,7 +99,7 @@ def run_scan(
             for f in found:
                 f.check = name
                 if verbose:
-                    log.info("[%s] %s — %s", f.severity, f.title, f.evidence[:80])
+                    log.info("[%s] %s - %s", f.severity, f.title, f.evidence[:80])
             result.findings.extend(found)
         except Exception as exc:  # noqa: BLE001
             msg = f"check '{name}' failed: {exc}"
