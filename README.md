@@ -1,9 +1,9 @@
 # ThreatHarbor
 
 A small command-line web vulnerability scanner. Given a target URL, it runs
-a handful of OWASP-style checks (security headers, cookie flags, redirect
-behavior, form posture, optional reflected-XSS probe) and produces a
-self-contained HTML report.
+six OWASP-style checks (security headers, TLS/certificate, cookie flags,
+redirect behavior, form posture, optional reflected-XSS probe) and produces a
+self-contained HTML report, a JSON report, or both.
 
 This is a learning / portfolio project — not a replacement for a real
 scanner like ZAP or Burp.
@@ -32,6 +32,13 @@ Custom report path:
 
 ```bash
 python main.py --url https://example.com --output reports/example.html
+```
+
+JSON output (written next to `--output` with a `.json` suffix), or both formats:
+
+```bash
+python main.py --url https://example.com --format json
+python main.py --url https://example.com --format both
 ```
 
 Verbose (log each finding as it's produced):
@@ -76,6 +83,7 @@ could not be fetched at all.
 | Module | What it does |
 | --- | --- |
 | `checks/headers.py` | Flags missing `X-Frame-Options`, `X-Content-Type-Options`, `Content-Security-Policy`, `Strict-Transport-Security`, `Referrer-Policy`; reports leaky `Server` / `X-Powered-By`. |
+| `checks/tls.py` | Opens its own TLS handshake; flags expired or soon-to-expire certificates (under two weeks), certificates that fail validation (untrusted issuer, hostname mismatch), and legacy TLS 1.0 / 1.1. Skipped for `http://` targets. |
 | `checks/cookies.py` | Inspects each `Set-Cookie`; flags missing `HttpOnly`, `Secure`, `SameSite`. |
 | `checks/redirects.py` | If you scanned an `http://` URL, checks whether it upgrades to HTTPS; also flags cross-host redirects (potential open-redirect). |
 | `checks/forms.py` | Lists every `<form>`; flags HTTP submission targets and POST forms with no plausible CSRF token (Info, heuristic). |
@@ -102,14 +110,17 @@ vulnerability_scanner/
 ├── main.py            # CLI: argparse, runs scanner, calls reporter
 ├── scanner.py         # Finding dataclass, ScanResult, run_scan()
 ├── reporter.py        # Renders ScanResult to HTML via Jinja2
+├── reporter_json.py   # Renders ScanResult to JSON
 ├── checks/
 │   ├── headers.py
+│   ├── tls.py
 │   ├── cookies.py
 │   ├── redirects.py
 │   ├── forms.py
 │   └── xss.py
 ├── templates/
 │   └── report.html    # Self-contained Jinja2 template
+├── website/           # Project site, deployed to GitHub Pages
 ├── requirements.txt
 └── README.md
 ```
