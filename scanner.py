@@ -75,7 +75,7 @@ def run_scan(
 
     result = ScanResult(target=url)
     session = requests.Session()
-    session.headers.update({"User-Agent": "vuln-scanner/1.0 (portfolio)"})
+    session.headers.update({"User-Agent": "ThreatHarbor/1.0 (+https://github.com/Kassidi-Iliasse/threatharbor)"})
 
     try:
         response = session.get(url, timeout=timeout, allow_redirects=True)

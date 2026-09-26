@@ -44,7 +44,7 @@ def _bounded_timeout(value: str) -> float:
 def build_parser() -> argparse.ArgumentParser:
     """Build the argparse parser. Factored out so it's testable."""
     p = argparse.ArgumentParser(
-        prog="vuln-scanner",
+        prog="threatharbor",
         description="Scan a URL for common web-security issues and emit an HTML report.",
     )
     p.add_argument("--url", required=True, type=_valid_url, help="target URL (http or https)")

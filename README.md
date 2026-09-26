@@ -106,7 +106,7 @@ could not be fetched at all.
 ## Architecture
 
 ```
-vulnerability_scanner/
+threatharbor/
 ├── main.py            # CLI: argparse, runs scanner, calls reporter
 ├── scanner.py         # Finding dataclass, ScanResult, run_scan()
 ├── reporter.py        # Renders ScanResult to HTML via Jinja2
